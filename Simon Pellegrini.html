@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simon Pellegrini</title>
+    <style>
+        /* Fullscreen white background */
+        body, html {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden; /* Prevent horizontal overflow */
+            background-color: white; /* Set background to white */
+            font-family: 'Times New Roman', serif; /* Use Times New Roman font */
+        }
+
+        /* Header container */
+        .header {
+            display: flex; /* Use flexbox to align items horizontally */
+            justify-content: space-between; /* Space between the items */
+            align-items: center; /* Vertically center the content */
+            padding: 20px 40px; /* Padding around the header */
+            position: absolute;
+            width: 100%;
+            box-sizing: border-box; /* Ensure padding doesn't cause overflow */
+            z-index: 100; /* Ensure the header is on top */
+        }
+
+        /* Left section (Simon Pellegrini) */
+        .left {
+            margin-left: 50px; /* Detach slightly from the left edge */
+        }
+
+        /* Center section (Selected Works) */
+        .center {
+            text-align: center;
+            flex-grow: 1; /* Center the item and make it take up remaining space */
+        }
+
+        /* Right section (Contacts) */
+        .right {
+            margin-right: 50px; /* Ensure there's space from the right edge */
+        }
+
+        /* Make the links behave like normal text (no changes visually) */
+        a {
+            text-decoration: none; /* Remove underline */
+            color: inherit; /* Inherit text color */
+            position: relative; /* Ensure it's positioned correctly */
+        }
+
+        a:hover {
+            cursor: pointer; /* Change cursor on hover to indicate it's clickable */
+        }
+
+        /* Spinning and floating image */
+        .container {
+            position: relative;
+            width: 100%;
+            height: 100%;
+        }
+
+        .floating-image {
+            position: absolute;
+            width: 400px;
+            height: 400px;
+            top: -200px; /* Start above the screen */
+            transform-origin: center;
+            animation: spin 15s linear infinite, fallDown 10s linear;
+            transition: left 0.5s ease-in-out; /* Smooth transition for new positions */
+        }
+
+        /* Slow rotation (1.5 rotations) */
+        @keyframes spin {
+            0% {
+                transform: rotate(0deg);
+            }
+            100% {
+                transform: rotate(540deg); /* 1.5 full rotations */
+            }
+        }
+
+        /* Vertical fall animation (from top to bottom) */
+        @keyframes fallDown {
+            0% {
+                top: -400px; /* Start from above the screen */
+            }
+            100% {
+                top: 100%; /* Move down to the bottom */
+            }
+        }
+    </style>
+</head>
+<body>
+
+<!-- Header Section -->
+<div class="header">
+    <!-- Left Section: Simon Pellegrini -->
+    <div class="left">
+        <a href="bio.html">Simon Pellegrini</a>
+    </div>
+    <!-- Center Section: Selected Works -->
+    <div class="center">
+        <a href="Selected Works.pdf">Selected Works</a>
+    </div>
+    <!-- Right Section: Contacts -->
+    <div class="right">
+        <a href="Contacts.html">Contacts</a>
+    </div>
+</div>
+
+<!-- Spinning and Floating Image Section -->
+<div class="container">
+    <img src="casettina.png" alt="Floating Casettina" class="floating-image" id="fallingImage">
+</div>
+
+<script>
+    // Get the image element
+    const image = document.getElementById('fallingImage');
+
+    // Function to generate a random position on the screen
+    function getRandomPosition() {
+        const minLeft = 10; // Minimum left position (10% from the left edge)
+        const maxLeft = 80; // Maximum left position (80% from the left edge)
+        return Math.random() * (maxLeft - minLeft) + minLeft; // Random position between 10% and 80%
+    }
+
+    // Function to start the animation
+    function startFallingAnimation() {
+        // Set a random left position for the image
+        const randomLeft = getRandomPosition();
+        image.style.left = randomLeft + '%';
+
+        // Clear previous animation to restart it
+        image.style.animation = 'none'; // Reset animation
+
+        // Trigger a reflow to restart the animation
+        void image.offsetHeight;  // This forces a reflow (necessary for restarting the animation)
+
+        // Apply the new animation
+        image.style.animation = 'spin 15s linear infinite, fallDown 10s linear';
+
+        // Call the next fall after 10 seconds
+        setTimeout(() => {
+            startFallingAnimation();
+        }, 10000); // Delay 10 seconds before triggering the next fall
+    }
+
+    // Initially start the animation
+    startFallingAnimation();
+</script>
+
+</body>
+</html>
